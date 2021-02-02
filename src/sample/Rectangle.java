@@ -2,10 +2,12 @@ package sample;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
-public class Rectangle {
+import java.awt.*;
+
+class Rectangles {
         class PosicioR {
             int posX;
             int posY;
@@ -14,15 +16,15 @@ public class Rectangle {
                 this.posY=y;
             }
         }
-       Rectangle.PosicioR posicio;
+       Rectangles.PosicioR posicio;
         int velocitat=10;
         Pane panell;
         Node Rectangle;
 
-        public Rectangle(Pane panell,int posX,int posY) {
-            posicio = new Rectangle.PosicioR(posX, posY);
+        public Rectangles(Pane panell,int posX,int posY, Color color) {
+            posicio = new Rectangles.PosicioR(posX, posY);
             this.panell = panell;
-            this.Rectangle = new javafx.scene.shape.Rectangle(posicio.posX - 20 , posicio.posY - 20);
+            this.Rectangle = new Rectangle(posicio.posX  , posicio.posY , color);
             posicio.posX = 0;
             posicio.posY = 0;
             this.Rectangle.setLayoutX(posicio.posX);

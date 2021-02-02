@@ -18,8 +18,8 @@ public class BollaRebotant0 extends Application {
 
     public static Circle cercle;
     public static Pane canvas;
-    public static Rectangle rectangleI;
-    public static Rectangle rectangleD;
+    public static Rectangles rectangleI;
+    public static Rectangles rectangleD;
 
     @Override
     public void start(final Stage primaryStage) {
@@ -36,18 +36,20 @@ public class BollaRebotant0 extends Application {
         cercle.relocate(200-radi, 200-radi);
 
 
-        rectangleI=new Rectangle(20,100,Color.RED);
-        rectangleI.setLayoutX(0);
-        rectangleI.setLayoutY(350);
+        rectangleI=new Rectangles(canvas,20, 100, Color.BLUE );
+        rectangleI.Rectangle.setLayoutX(0);
+        rectangleI.Rectangle.setLayoutY(350);
 
-        rectangleD=new Rectangle(20,100,Color.BLUE);
-        rectangleD.setLayoutX(980);
-        rectangleD.setLayoutY(350);
+
+        rectangleD=new Rectangles(canvas,20, 100, Color.RED);
+        rectangleD.Rectangle.setLayoutX(980);
+        rectangleD.Rectangle.setLayoutY(350);
+
 
 
         canvas.getChildren().addAll(cercle);
-        canvas.getChildren().addAll(rectangleI);
-        canvas.getChildren().addAll(rectangleD);
+        //canvas.getChildren().addAll(rectangleI);
+        //canvas.getChildren().addAll(rectangleD);
 
 
         final Timeline loop = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
@@ -97,6 +99,7 @@ public class BollaRebotant0 extends Application {
                     deltaY = Math.signum(deltaY)*(Math.random()*10+1);
                     deltaY *= -1;
                 }
+
             }
         }));
 
@@ -107,5 +110,7 @@ public class BollaRebotant0 extends Application {
 
 
 
-
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
