@@ -1,13 +1,13 @@
 package sample;
 
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
-
-class Rectangles {
+class RectanglesI {
         class PosicioR {
             int posX;
             int posY;
@@ -16,17 +16,18 @@ class Rectangles {
                 this.posY=y;
             }
         }
-       Rectangles.PosicioR posicio;
-        int velocitat=10;
+       RectanglesI.PosicioR posicio;
+        int velocitat=40;
         Pane panell;
         Node Rectangle;
 
-        public Rectangles(Pane panell,int posX,int posY, Color color) {
-            posicio = new Rectangles.PosicioR(posX, posY);
+        public RectanglesI(Pane panell,int posX,int posY, Color color) {
+            posicio = new RectanglesI.PosicioR(posX, posY);
             this.panell = panell;
             this.Rectangle = new Rectangle(posicio.posX  , posicio.posY , color);
-            posicio.posX = 0;
-            posicio.posY = 0;
+            final Bounds limits = panell.getBoundsInLocal();
+            posicio.posX = (int) limits.getMinX() + posX ;
+            posicio.posY = (int) limits.getMaxY() /2 - posY/2;
             this.Rectangle.setLayoutX(posicio.posX);
             this.Rectangle.setLayoutY(posicio.posY);
             this.panell.getChildren().add(this.Rectangle);
@@ -36,7 +37,6 @@ class Rectangles {
     public void mouAmunt() {
         posicio.posY=posicio.posY-this.velocitat;
         this.repinta();
-        System.out.println("Amunt pitjat");
     }
 
     /**
@@ -45,10 +45,13 @@ class Rectangles {
     public void mouAbaix() {
         posicio.posY=posicio.posY+this.velocitat;
         this.repinta();
-        System.out.println("Abaix pitjat");
     }
     private void repinta() {
-        this.Rectangle.setLayoutX(posicio.posX);
+
         this.Rectangle.setLayoutY(posicio.posY);
+    }
+    public void LimitY(){
+        posicio.posY=posicio.posY-this.velocitat;
+        repinta();
     }
 }
