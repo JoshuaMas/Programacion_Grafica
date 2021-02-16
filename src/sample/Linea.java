@@ -7,9 +7,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
+/*
 
 class Linea {
-    class PosicioR {
+    static class PosicioR {
         int posX;
         int posY;
         public PosicioR(int x,int y) {
@@ -33,4 +34,4 @@ class Linea {
         this.panell.getChildren().add(this.Line);
 
     }
-}
+}*/

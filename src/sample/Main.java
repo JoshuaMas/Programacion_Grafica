@@ -1,16 +1,17 @@
 package sample;
 
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -34,7 +35,6 @@ public class Main extends Application {
 
 
     public void start( Stage primaryStage) {
-        boolean start= false;
 
         canvas = new Pane();
         final Scene escena = new Scene(canvas, ampleCanvas, alturaCanvas, Color.BLACK);
@@ -66,23 +66,23 @@ public class Main extends Application {
         scoreI = new Text(Player1+"");
         scoreI.setFont(new Font("ComicSans",60));
         scoreI.setFill(Color.WHITE);
-        scoreI.relocate(750, 25);
+        scoreI.relocate(ampleCanvas/2-40, 25);
         scoreI.setStyle("-fx-font-weight:bold;");
 
         scoreD = new Text(""+Player2);
         scoreD.setFont(new Font("ComicSans",60));
         scoreD.setFill(Color.WHITE);
-        scoreD.relocate(820, 25);
+        scoreD.relocate(ampleCanvas/2+10, 25);
         scoreD.setStyle("-fx-font-weight:bold;");
 
         //Texto de los players
-        Text player1Title = new Text("Player1");
+        Text player1Title = new Text("Tofol");
         player1Title.setFont(new Font("ComicSans",60));
         player1Title.setFill(Color.WHITE);
         player1Title.relocate(50, 25);
         player1Title.setStyle("-fx-font-weight:bold;");
 
-        Text player2Title = new Text("Player2");
+        Text player2Title = new Text("Fulano");
         player2Title.setFont(new Font("ComicSans",60));
         player2Title.setFill(Color.WHITE);
         player2Title.relocate(ampleCanvas-270, 25);
@@ -91,7 +91,7 @@ public class Main extends Application {
         Text gameOver = new Text("Game Over!");
         gameOver.setFont(new Font("ComicSans",60));
         gameOver.setFill(Color.WHITE);
-        gameOver.relocate(ampleCanvas-230, 25);
+        gameOver.relocate(ampleCanvas-170, 25);
         gameOver.setStyle("-fx-font-weight:bold;");
 
         canvas.getChildren().addAll(cercle);
@@ -224,15 +224,135 @@ public class Main extends Application {
                     break;
                 }
             });
+
+
         }
 
     public void gameOver(){
     }
     public void ResetPos(){
-        cercle.setLayoutY(400);
-        cercle.setLayoutX(800);
+        int random = (int) Math.random()*(alturaCanvas-100);
+        cercle.setLayoutY(random);
+        cercle.setLayoutX(ampleCanvas/2);
     }
     public static void main(String[] args) {
         launch(args);
+    }
+}
+    class RectanglesD {
+    class PosicioR {
+        int posX;
+        int posY;
+        public PosicioR(int x,int y) {
+            this.posX=x;
+            this.posY=y;
+        }
+    }
+    PosicioR posicio;
+    int velocitat=40;
+    Pane panell;
+    Node Rectangle;
+
+    public RectanglesD(Pane panell,int posX,int posY, Color color) {
+        posicio = new PosicioR(posX, posY);
+        this.panell = panell;
+        this.Rectangle = new Rectangle(posicio.posX  , posicio.posY , color);
+        final Bounds limits = panell.getBoundsInLocal();
+        posicio.posX = (int) limits.getMaxX() -posX*2;
+        posicio.posY = (int) limits.getMaxY() /2 - (posY/2);
+        this.Rectangle.setLayoutX(posicio.posX);
+        this.Rectangle.setLayoutY(posicio.posY);
+        this.panell.getChildren().add(this.Rectangle);
+
+    }
+
+    public void mouAmunt() {
+        posicio.posY=posicio.posY-this.velocitat;
+        this.repinta();
+    }
+
+    /**
+     * Mou bolla cap abaix
+     */
+    public void mouAbaix() {
+        posicio.posY=posicio.posY+this.velocitat;
+        this.repinta();
+    }
+    private void repinta() {
+        this.Rectangle.setLayoutX(posicio.posX);
+        this.Rectangle.setLayoutY(posicio.posY);
+    }
+}
+    class RectanglesI {
+    class PosicioR {
+        int posX;
+        int posY;
+        public PosicioR(int x,int y) {
+            this.posX=x;
+            this.posY=y;
+        }
+    }
+    PosicioR posicio;
+    int velocitat=40;
+    Pane panell;
+    Node Rectangle;
+
+    public RectanglesI(Pane panell,int posX,int posY, Color color) {
+        posicio = new PosicioR(posX, posY);
+        this.panell = panell;
+        this.Rectangle = new Rectangle(posicio.posX  , posicio.posY , color);
+        final Bounds limits = panell.getBoundsInLocal();
+        posicio.posX = (int) limits.getMinX() + posX ;
+        posicio.posY = (int) limits.getMaxY() /2 - posY/2;
+        this.Rectangle.setLayoutX(posicio.posX);
+        this.Rectangle.setLayoutY(posicio.posY);
+        this.panell.getChildren().add(this.Rectangle);
+
+    }
+
+    public void mouAmunt() {
+        posicio.posY=posicio.posY-this.velocitat;
+        this.repinta();
+    }
+
+    /**
+     * Mou bolla cap abaix
+     */
+    public void mouAbaix() {
+        posicio.posY=posicio.posY+this.velocitat;
+        this.repinta();
+    }
+    private void repinta() {
+
+        this.Rectangle.setLayoutY(posicio.posY);
+    }
+    public void LimitY(){
+        posicio.posY=posicio.posY-this.velocitat;
+        repinta();
+    }
+}
+    class Linea {
+    class PosicioR {
+        int posX;
+        int posY;
+        public PosicioR(int x,int y) {
+            this.posX=x;
+            this.posY=y;
+        }
+    }
+    sample.Linea.PosicioR posicio;
+
+    Pane panell;
+    Node Line;
+
+    public Linea(Pane panell,int posX,int posY, Color color) {
+        posicio = new sample.Linea.PosicioR(posX, posY);
+        this.panell = panell;
+        this.Line = new Rectangle(posicio.posX  , posicio.posY , color);
+        posicio.posX = Main.ampleCanvas/2;
+        posicio.posY = 0;
+        this.Line.setLayoutX(posicio.posX);
+        this.Line.setLayoutY(posicio.posY);
+        this.panell.getChildren().add(this.Line);
     }
 }

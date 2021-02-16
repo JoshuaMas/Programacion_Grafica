@@ -7,8 +7,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
-class RectanglesI {
-        class PosicioR {
+/*class RectanglesI {
+        static class PosicioR {
             int posX;
             int posY;
             public PosicioR(int x,int y) {
@@ -39,9 +39,9 @@ class RectanglesI {
         this.repinta();
     }
 
-    /**
+    *//**
      * Mou bolla cap abaix
-     */
+     *//*
     public void mouAbaix() {
         posicio.posY=posicio.posY+this.velocitat;
         this.repinta();
@@ -54,4 +54,4 @@ class RectanglesI {
         posicio.posY=posicio.posY-this.velocitat;
         repinta();
     }
-}
+}*/

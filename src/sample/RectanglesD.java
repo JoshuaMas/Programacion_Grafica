@@ -1,6 +1,7 @@
 package sample;
 
 
+/*
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -11,7 +12,7 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 
 class RectanglesD {
-    class PosicioR {
+    static class PosicioR {
         int posX;
         int posY;
         public PosicioR(int x,int y) {
@@ -42,9 +43,11 @@ class RectanglesD {
         this.repinta();
     }
 
-    /**
+    */
+/**
      * Mou bolla cap abaix
-     */
+     *//*
+
     public void mouAbaix() {
         posicio.posY=posicio.posY+this.velocitat;
         this.repinta();
@@ -53,4 +56,4 @@ class RectanglesD {
         this.Rectangle.setLayoutX(posicio.posX);
         this.Rectangle.setLayoutY(posicio.posY);
     }
-}
+}*/
