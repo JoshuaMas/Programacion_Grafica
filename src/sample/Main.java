@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -20,114 +21,104 @@ public class Main extends Application {
 
     public static Circle cercle;
     public static Pane canvas;
+    public static Pane gameOverScene;
     public static RectanglesI rectangleI;
     public static RectanglesD rectangleD;
     private Linea Linea;
-    public static int ampleRectangle=20;
-    public static int alturaRectangle=100;
-    public static int ampleCanvas=1600;
-    public static int alturaCanvas=800;
+    public final static int ampleRectangle=20;
+    public final static int alturaRectangle=100;
+    public final static int ampleCanvas=800;
+    public final static int alturaCanvas=600;
     private Text scoreI;
     private Text scoreD;
+    private Text player1Title;
+    private Text player2Title;
+    private Text start;
     private int Player1=0;
     private int Player2=0;
+    public static Timeline loop;
+    public static int radi=15;
 
 
 
     public void start( Stage primaryStage) {
 
+
         canvas = new Pane();
         final Scene escena = new Scene(canvas, ampleCanvas, alturaCanvas, Color.BLACK);
-
-        primaryStage.setTitle("Bolla Rebotant");
+        primaryStage.setTitle("MayerPong");
         primaryStage.setScene(escena);
         primaryStage.show();
 
-        int radi=15;
         cercle = new Circle(radi, Color.WHITE);
-        cercle.setLayoutY(400);
-        cercle.setLayoutX(800);
-
-        Linea = new Linea(canvas, 5, alturaCanvas, Color.WHITE);
-
-
-
+        cercle.setLayoutY(alturaCanvas/2);
+        cercle.setLayoutX(ampleCanvas/2);
+        Linea = new Linea(canvas, 2, alturaCanvas, Color.WHITE);
         rectangleI=new RectanglesI(canvas,ampleRectangle, alturaRectangle, Color.WHITE );
-        //rectangleI.Rectangle.setLayoutX(20);
-        //rectangleI.Rectangle.setLayoutY(350);
-
-
         rectangleD=new RectanglesD(canvas,ampleRectangle, alturaRectangle, Color.WHITE);
-        //rectangleD.Rectangle.setLayoutX(960);
-        //rectangleD.Rectangle.setLayoutY(350);
+
 
 
         //Texto de la puntuación
-        scoreI = new Text(Player1+"");
-        scoreI.setFont(new Font("ComicSans",60));
-        scoreI.setFill(Color.WHITE);
-        scoreI.relocate(ampleCanvas/2-40, 25);
-        scoreI.setStyle("-fx-font-weight:bold;");
-
-        scoreD = new Text(""+Player2);
-        scoreD.setFont(new Font("ComicSans",60));
-        scoreD.setFill(Color.WHITE);
-        scoreD.relocate(ampleCanvas/2+10, 25);
-        scoreD.setStyle("-fx-font-weight:bold;");
-
-        //Texto de los players
-        Text player1Title = new Text("Tofol");
-        player1Title.setFont(new Font("ComicSans",60));
-        player1Title.setFill(Color.WHITE);
-        player1Title.relocate(50, 25);
-        player1Title.setStyle("-fx-font-weight:bold;");
-
-        Text player2Title = new Text("Fulano");
-        player2Title.setFont(new Font("ComicSans",60));
-        player2Title.setFill(Color.WHITE);
-        player2Title.relocate(ampleCanvas-270, 25);
-        player2Title.setStyle("-fx-font-weight:bold;");
-
-        Text gameOver = new Text("Game Over!");
-        gameOver.setFont(new Font("ComicSans",60));
-        gameOver.setFill(Color.WHITE);
-        gameOver.relocate(ampleCanvas-170, 25);
-        gameOver.setStyle("-fx-font-weight:bold;");
-
-        canvas.getChildren().addAll(cercle);
-        canvas.getChildren().addAll(scoreI);
-        canvas.getChildren().addAll(scoreD);
-        canvas.getChildren().addAll(player1Title);
-        canvas.getChildren().addAll(player2Title);
-        //canvas.getChildren().addAll(gameOver);
-        //canvas.getChildren().addAll(rectangleI);
-        //canvas.getChildren().addAll(rectangleD);
-
-        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
+        texto();
 
 
-            // Formula en radians
-            //double deltaX = 3*Math.cos(Math.PI/3);
-            //double deltaY = 3*Math.sin(Math.PI/3);
-
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             // Formula en graus
-            double angle_en_radians =Math.toRadians(30);
-            double velocitat=5.00;
-            double deltaX = velocitat*Math.cos(angle_en_radians);
-            double deltaY = velocitat*Math.sin(angle_en_radians);
+            double angle_en_radians = Math.toRadians(30);
+            double velocitat = 3.00;
+            double deltaX = velocitat * Math.cos(angle_en_radians);
+            double deltaY = velocitat * Math.sin(angle_en_radians);
 
             // Simulació gravitatòria
             final Bounds limits = canvas.getBoundsInLocal();
 
             @Override
             public void handle(final ActionEvent t) {
-                /*if (Player1<2&&Player2<2){*/
-                //cercle.setLayoutX(cercle.getLayoutX() + deltaX/2);
+                if (Player1 == 2){
+                    loop.stop();
+
+                    Pane gameOverScene = new Pane();
+                    final Scene escena2 = new Scene(gameOverScene, ampleCanvas, alturaCanvas, Color.BLACK);
+                    primaryStage.setTitle("gameOverMayerPong");
+                    primaryStage.setScene(escena2);
+                    primaryStage.show();
+                    Text gameOver = new Text("Game Over");
+                    gameOver.setFont(new Font("ComicSans",60));
+                    gameOver.setFill(Color.WHITE);
+                    gameOver.relocate(ampleCanvas/2-150, alturaCanvas/2-50);
+                    gameOverScene.getChildren().addAll(gameOver);
+                    Text win1 = new Text("Ha ganado el " + player1Title.getText());
+                    win1.setFont(new Font("ComicSans",40));
+                    win1.setFill(Color.WHITE);
+                    win1.relocate(ampleCanvas*50/100-210,  alturaCanvas*22/100);
+                    gameOverScene.getChildren().addAll(win1);
+
+                    ResetPos();
+                }else if (Player2 == 2){
+                    loop.stop();
+                    gameOverScene = new Pane();
+                    Scene escena2 = new Scene(gameOverScene, ampleCanvas, alturaCanvas, Color.BLACK);
+                    primaryStage.setTitle("gameOverMayerPong");
+                    primaryStage.setScene(escena2);
+                    primaryStage.show();
+                    Text gameOver = new Text("Game Over");
+                    gameOver.setFont(new Font("ComicSans",60));
+                    gameOver.setFill(Color.WHITE);
+                    gameOver.relocate(ampleCanvas/2-150, alturaCanvas/2-50);
+                    gameOverScene.getChildren().addAll(gameOver);
+
+                    Text win2 = new Text("Ha ganado el Jugador 2");
+                    win2.setFont(new Font("ComicSans",40));
+                    win2.setFill(Color.WHITE);
+                    win2.relocate(ampleCanvas*50/100-210, alturaCanvas*22/100);
+                    gameOverScene.getChildren().addAll(win2);
+                    ResetPos();
+                }
+                else {
 
                 cercle.setLayoutX(cercle.getLayoutX() + deltaX);
-                //cercle.setLayoutY(cercle.getLayoutY() + deltaY/3);
                 cercle.setLayoutY(cercle.getLayoutY() + deltaY);
-                //System.out.println(cercle.getLayoutX()+":"+cercle.getLayoutY());
 
 
 
@@ -136,103 +127,134 @@ public class Main extends Application {
                 final boolean alLimitInferior = cercle.getLayoutY() >= (limits.getMaxY() - cercle.getRadius());
                 final boolean alLimitSuperior = cercle.getLayoutY() <= (limits.getMinY() + cercle.getRadius());
 
-                final boolean alLimitInferiorRectangleI = rectangleI.Rectangle.getLayoutY() > (limits.getMaxY()-alturaRectangle+20 );
-                final boolean alLimitSuperiorRectangleI = rectangleI.Rectangle.getLayoutY() <= (limits.getMinY())-20;
-                final boolean alLimitInferiorRectangleD = rectangleD.Rectangle.getLayoutY() > (limits.getMaxY()-alturaRectangle+20 );
-                final boolean alLimitSuperiorRectangleD = rectangleD.Rectangle.getLayoutY() <= (limits.getMinY()-20);
+                final boolean alLimitInferiorRectangleI = rectangleI.Rectangle.getLayoutY() > (limits.getMaxY() - alturaRectangle + 20);
+                final boolean alLimitSuperiorRectangleI = rectangleI.Rectangle.getLayoutY() <= (limits.getMinY()) - 20;
+                final boolean alLimitInferiorRectangleD = rectangleD.Rectangle.getLayoutY() > (limits.getMaxY() - alturaRectangle + 20);
+                final boolean alLimitSuperiorRectangleD = rectangleD.Rectangle.getLayoutY() <= (limits.getMinY() - 20);
 
                 if (alLimitSuperiorRectangleI) {
                     rectangleI.mouAbaix();
-            }
+                }
                 if (alLimitInferiorRectangleI) {
                     rectangleI.mouAmunt();
                 }
-                if (alLimitSuperiorRectangleD){
+                if (alLimitSuperiorRectangleD) {
                     rectangleD.mouAbaix();
                 }
-                if (alLimitInferiorRectangleD){
+                if (alLimitInferiorRectangleD) {
                     rectangleD.mouAmunt();
                 }
                 if (alLimitEsquerra) {
                     // Delta aleatori
                     // Multiplicam pel signe de deltaX per mantenir la trajectoria
                     //deltaX = Math.signum(deltaX)*(Math.random()*10+1);
-
-                    deltaX *= -1;
-                    ResetPos();
-                    Player2++;
-                    scoreD.setText(""+Player2);
+                    int a = (int) (Math.random()*2+1);
+                    if (a == 1){
+                        deltaX *= +1;
+                        deltaY *= -1;
+                    }else {
+                        deltaX *= +1;
+                        deltaY *= +1;
+                        ResetPos();
+                        Player2++;
+                        scoreD.setText("" + Player2);
+                    }
                 }
                 if (alLimitDret) {
                     // Delta aleatori
                     // Multiplicam pel signe de deltaX per mantenir la trajectoria
                     //deltaX = Math.signum(deltaX)*(Math.random()*10+1);
-
-                    deltaX *= -1;
+                    int a = (int) (Math.random()*2+1);
+                    if (a == 1){
+                        deltaX *= +1;
+                        deltaY *= -1;
+                    }else{
+                        deltaX *= +1;
+                        deltaY *= +1;
                     Player1++;
-                    scoreI.setText(Player1+"");
+                    scoreI.setText(Player1 + "");
                     ResetPos();
-
+                }
                 }
 
-                if (alLimitInferior || alLimitSuperior) {
+                    if (alLimitInferior || alLimitSuperior) {
                     // Delta aleatori
                     // Multiplicam pel signe de deltaX per mantenir la trajectoria
                     //deltaY = Math.signum(deltaY)*(Math.random()*10+1);
                     deltaY *= -1;
-                }
-                if(cercle.getBoundsInParent().intersects(rectangleI.Rectangle.getBoundsInParent())) {
+                     }
+                    if (cercle.getBoundsInParent().intersects(rectangleI.Rectangle.getBoundsInParent())) {
                     deltaX *= -1;
-                }
-                if(cercle.getBoundsInParent().intersects(rectangleD.Rectangle.getBoundsInParent())) {
-                    deltaX *= -1;
-                }
-                System.out.println(velocitat);
-            /*}else{
-                    canvas.getChildren().addAll(gameOver);
-                    try{
-                        Thread.sleep(2000);
-                    }catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } {
-                        System.out.println("Game Over");
                     }
-                }*/
-
+                    if (cercle.getBoundsInParent().intersects(rectangleD.Rectangle.getBoundsInParent())) {
+                    deltaX *= -1;
+                    }
+                }
             }
-        }
- ));
-
-
-
+        };
+        loop = new Timeline(new KeyFrame(Duration.millis(10), event));
         loop.setCycleCount(Timeline.INDEFINITE);
-        loop.play();
         canvas.requestFocus();
         canvas.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.SPACE)){
+                loop.play();
+                canvas.getChildren().remove(start);
+            }
             switch (e.getCode()) {
-                case W:
+                case UP:
                     rectangleI.mouAmunt();
                     break;
-                case S:
+                case DOWN:
                     rectangleI.mouAbaix();
                     break;
-                case UP:
+                case W:
                     rectangleD.mouAmunt();
                     break;
-                case DOWN:
+                case S:
                     rectangleD.mouAbaix();
                     break;
-                }
-            });
+            }
+        });
+    }
+    public void texto(){
+        scoreI = new Text(Player1+"");
+        scoreI.setFont(new Font("ComicSans",40));
+        scoreI.setFill(Color.WHITE);
+        scoreI.relocate(ampleCanvas*40/100, 25);
 
+        scoreD = new Text(""+Player2);
+        scoreD.setFont(new Font("ComicSans",40));
+        scoreD.setFill(Color.WHITE);
+        scoreD.relocate(ampleCanvas*60/100-20, 25);
 
-        }
+        //Texto de los players
+        player1Title = new Text("Jugador1");
+        player1Title.setFont(new Font("ComicSans",40));
+        player1Title.setFill(Color.WHITE);
+        player1Title.relocate(ampleCanvas*2/100, 25);
+        player1Title.setStyle("-fx-font-weight:bold;");
 
-    public void gameOver(){
+        player2Title = new Text("Jugador2");
+        player2Title.setFont(new Font("ComicSans",40));
+        player2Title.setFill(Color.WHITE);
+        player2Title.relocate(ampleCanvas*75/100, 25);
+        player2Title.setStyle("-fx-font-weight:bold;");
+
+        start = new Text("Pitja la tecla espai per començar");
+        start.setFont(new Font("ComicSans",20));
+        start.setFill(Color.WHITE);
+        start.relocate(ampleCanvas/2-130, alturaCanvas*20/100);
+
+        canvas.getChildren().addAll(cercle);
+        canvas.getChildren().addAll(scoreI);
+        canvas.getChildren().addAll(scoreD);
+        canvas.getChildren().addAll(player1Title);
+        canvas.getChildren().addAll(player2Title);
+        canvas.getChildren().addAll(start);
     }
     public void ResetPos(){
-        int random = (int) Math.random()*(alturaCanvas-100);
-        cercle.setLayoutY(random);
+
+        cercle.setLayoutY((Math.random()*(alturaCanvas-cercle.getRadius()))+cercle.getRadius());
         cercle.setLayoutX(ampleCanvas/2);
     }
     public static void main(String[] args) {
